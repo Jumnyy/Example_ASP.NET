@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using CMS.Data;
-// Thêm namespace này ?? dùng ???c CookieAuthenticationDefaults
+// ThÃªm namespace nÃ y ?? dÃ¹ng ???c CookieAuthenticationDefaults
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,23 +8,29 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// ??ng ký DbContext vào h? th?ng
+// ??ng kÃ½ DbContext vÃ o h? th?ng
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // =========================================================================
-// CHÈN T?I ?ÂY: Tr??c dòng var app = builder.Build();
-// 1. Khai báo d?ch v? xác th?c Cookie
+// CHÃˆN T?I ?Ã‚Y: Tr??c dÃ²ng var app = builder.Build();
+// 1. Khai bÃ¡o d?ch v? xÃ¡c th?c Cookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login"; // ???ng d?n n?u ch?a ??ng nh?p
-        options.AccessDeniedPath = "/Account/AccessDenied"; // ???ng d?n n?u vào trang không ???c phép
+        options.AccessDeniedPath = "/Account/AccessDenied"; // ???ng d?n n?u vÃ o trang khÃ´ng ???c phÃ©p
     });
 // =========================================================================
-
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
-
+// KÃ­ch hoáº¡t Swagger UI cho cáº£ mÃ´i trÆ°á»ng Development vÃ  Production Ä‘á»ƒ dá»… kiá»ƒm thá»­
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMS API v1");
+});
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -39,10 +45,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // =========================================================================
-// CHÈN T?I ?ÂY: Ngay tr??c app.UseAuthorization();
-app.UseAuthentication(); // B??C A: Xác nh?n "Anh là ai?" (Ki?m tra th? bài)
+// CHÃˆN T?I ?Ã‚Y: Ngay tr??c app.UseAuthorization();
+app.UseAuthentication(); // B??C A: XÃ¡c nh?n "Anh lÃ  ai?" (Ki?m tra th? bÃ i)
 // =========================================================================
-app.UseAuthorization();  // B??C B: Xác nh?n "Anh ???c làm gì?" (Ki?m tra quy?n)
+app.UseAuthorization();  // B??C B: XÃ¡c nh?n "Anh ???c lÃ m gÃ¬?" (Ki?m tra quy?n)
 
 app.MapControllerRoute(
     name: "default",
