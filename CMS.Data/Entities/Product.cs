@@ -21,7 +21,7 @@ namespace CMS.Data.Entities
         [Required(ErrorMessage ="Ten san pham khong duoc de trong")]
         public string Name { get; set; }
         public string? Description { get; set; }
-        [Range(0,double.MinValue)]
+        [Range(0,double.MaxValue)]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public int stockQuantity { get; set; }

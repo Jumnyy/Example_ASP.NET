@@ -7,54 +7,56 @@ namespace CMS.Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PostsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // =========================================
-        // GET ALL POSTS
+        // GET ALL
         // =========================================
         [HttpGet]
         public IActionResult GetAll()
         {
-            var posts = _context.Posts
+            var products = _context.Products
                 .OrderByDescending(p => p.Id)
                 .Select(p => new
                 {
                     p.Id,
-                    p.Title,
+                    p.Name,
+                    p.Price,
                     p.ImageUrl,
-                    p.CreatedDate,
-                    CategoryName = p.Category.Name
+                    p.stockQuantity,
+                    CategoryName = p.CategoryProduct.Name
                 })
                 .ToList();
 
-            return Ok(posts);
+            return Ok(products);
         }
 
         // =========================================
-        // GET POSTS BY CATEGORY
+        // GET BY CATEGORY
         // =========================================
         [HttpGet("category/{categoryId}")]
         public IActionResult GetByCategory(int categoryId)
         {
-            var posts = _context.Posts
-                .Where(p => p.CategoryId == categoryId)
+            var products = _context.Products
+                .Where(p => p.CategoryProductId == categoryId)
                 .Select(p => new
                 {
                     p.Id,
-                    p.Title,
+                    p.Name,
+                    p.Price,
                     p.ImageUrl,
-                    p.CreatedDate
+                    p.stockQuantity
                 })
                 .ToList();
 
-            return Ok(posts);
+            return Ok(products);
         }
 
         // =========================================
@@ -63,41 +65,39 @@ namespace CMS.Backend.Controllers
         [HttpGet("{id}")]
         public IActionResult GetDetail(int id)
         {
-            var post = _context.Posts
-                .Include(p => p.Category)
+            var product = _context.Products
+                .Include(p => p.CategoryProduct)
                 .FirstOrDefault(p => p.Id == id);
 
-            if (post == null)
+            if (product == null)
             {
                 return NotFound(new
                 {
-                    message = "Không tìm thấy bài viết"
+                    message = "Không tìm thấy sản phẩm này"
                 });
             }
 
-            return Ok(post);
+            return Ok(product);
         }
 
         // =========================================
         // CREATE
         // =========================================
         [HttpPost]
-        public IActionResult Create(Post post)
+        public IActionResult Create(Product product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            post.CreatedDate = DateTime.Now;
-
-            _context.Posts.Add(post);
+            _context.Products.Add(product);
             _context.SaveChanges();
 
             return Ok(new
             {
-                message = "Thêm bài viết thành công",
-                data = post
+                message = "Thêm sản phẩm thành công",
+                data = product
             });
         }
 
@@ -105,9 +105,9 @@ namespace CMS.Backend.Controllers
         // UPDATE
         // =========================================
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Post post)
+        public IActionResult Update(int id, Product product)
         {
-            if (id != post.Id)
+            if (id != product.Id)
             {
                 return BadRequest(new
                 {
@@ -115,27 +115,29 @@ namespace CMS.Backend.Controllers
                 });
             }
 
-            var existingPost = _context.Posts.Find(id);
+            var existingProduct = _context.Products.Find(id);
 
-            if (existingPost == null)
+            if (existingProduct == null)
             {
                 return NotFound(new
                 {
-                    message = "Không tìm thấy bài viết"
+                    message = "Không tìm thấy sản phẩm"
                 });
             }
 
-            existingPost.Title = post.Title;
-            existingPost.Content = post.Content;
-            existingPost.ImageUrl = post.ImageUrl;
-            existingPost.CategoryId = post.CategoryId;
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+            existingProduct.stockQuantity = product.stockQuantity;
+            existingProduct.ImageUrl = product.ImageUrl;
+            existingProduct.CategoryProductId = product.CategoryProductId;
 
             _context.SaveChanges();
 
             return Ok(new
             {
                 message = "Cập nhật thành công",
-                data = existingPost
+                data = existingProduct
             });
         }
 
@@ -145,22 +147,22 @@ namespace CMS.Backend.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var post = _context.Posts.Find(id);
+            var product = _context.Products.Find(id);
 
-            if (post == null)
+            if (product == null)
             {
                 return NotFound(new
                 {
-                    message = "Không tìm thấy bài viết"
+                    message = "Không tìm thấy sản phẩm"
                 });
             }
 
-            _context.Posts.Remove(post);
+            _context.Products.Remove(product);
             _context.SaveChanges();
 
             return Ok(new
             {
-                message = "Xóa bài viết thành công"
+                message = "Xóa thành công"
             });
         }
     }

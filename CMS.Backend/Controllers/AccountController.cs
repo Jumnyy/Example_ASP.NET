@@ -38,9 +38,9 @@ public class AccountController : Controller
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            if (user.Role == "Admin")
+            if (user.Role == "Admin" || user.Role == "Editor")
             {
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Index", "Category");
             }
             else
             {
@@ -50,7 +50,7 @@ public class AccountController : Controller
 
         ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng!";
         return View();
-    }
+    } 
 
     public async Task<IActionResult> Logout()
     {
