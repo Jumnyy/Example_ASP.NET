@@ -5,25 +5,173 @@
     ViewData["Title"] = "Quản lý sản phẩm";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-dark fw-bold">QUẢN LÝ SẢN PHẨM</h2>
-        <a asp-action="Create" class="btn btn-success fw-bold">
-            <i class="bi bi-plus-circle"></i> Thêm sản phẩm mới
+<style>
+    /* Tiêu đề Serif cổ điển có nét chỉ gạch vàng đồng bên dưới */
+    .vintage-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+        .vintage-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #c49a6c;
+        }
+
+    /* Thẻ hộp bọc ngoài vuông vức viền đứt nét retro */
+    .vintage-card {
+        border: 2px dashed #52433a !important;
+        border-radius: 0px !important;
+        background-color: #fdfbf7;
+        box-shadow: 0 5px 15px rgba(61, 49, 42, 0.05);
+    }
+
+    /* Thiết kế bảng dữ liệu kiểu sổ da cổ */
+    .vintage-table {
+        margin-bottom: 0;
+    }
+
+        .vintage-table thead {
+            background-color: #556b2f !important; /* Màu xanh rêu Olive */
+            color: #fffdec !important;
+        }
+
+        .vintage-table th {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 12px 15px !important;
+            border-bottom: 2px solid #3d312a !important;
+        }
+
+        .vintage-table td {
+            padding: 12px 15px !important;
+            vertical-align: middle;
+            color: #4a3b32;
+            border-bottom: 1px solid #e8e3d7 !important;
+        }
+
+        /* Màu dòng xen kẽ giấy ngà */
+        .vintage-table tbody tr:nth-of-type(odd) {
+            background-color: #f9f7f2;
+        }
+
+        .vintage-table tbody tr:hover {
+            background-color: #f3ebd9 !important;
+            transition: background-color 0.2s ease;
+        }
+
+    /* Khung ảnh sản phẩm nhỏ */
+    .vintage-product-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 0px !important;
+        border: 1px dashed #8c7667 !important;
+        padding: 2px;
+        background-color: #fffdfa;
+    }
+
+    /* Nút tạo mới sản phẩm */
+    .btn-vintage-success {
+        background-color: #556b2f;
+        color: #fffdec;
+        border: 1px solid #485c28;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 8px 16px;
+        transition: all 0.3s;
+    }
+
+        .btn-vintage-success:hover {
+            background-color: #3d312a;
+            color: #f5ebd9;
+            border-color: #2b221d;
+        }
+
+    /* Nhóm nút Sửa / Xóa tinh gọn */
+    .btn-vintage-action-edit {
+        background-color: #fffdfa;
+        color: #bfa15f;
+        border: 1px solid #dcd1ba;
+        border-radius: 0px;
+        transition: all 0.2s;
+    }
+
+        .btn-vintage-action-edit:hover {
+            background-color: #c49a6c;
+            color: #fffdec;
+            border-color: #c49a6c;
+        }
+
+    .btn-vintage-action-delete {
+        background-color: #fffdfa;
+        color: #c95a49;
+        border: 1px solid #ebd4d0;
+        border-radius: 0px;
+        transition: all 0.2s;
+    }
+
+        .btn-vintage-action-delete:hover {
+            background-color: #a63a2b;
+            color: #fffdec;
+            border-color: #a63a2b;
+        }
+
+    /* Các nhãn Badge báo trạng thái tồn kho giả cổ */
+    .badge-vintage-safe {
+        background-color: #8fa47e !important; /* Xanh rêu nhạt */
+        color: #2b3a1a !important;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 5px 10px;
+    }
+
+    .badge-vintage-danger {
+        background-color: #e3aba2 !important; /* Đỏ gạch nung nhạt */
+        color: #5c1e16 !important;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 5px 10px;
+        animation: vintagePulse 2s infinite;
+    }
+
+    .vintage-price {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #8b4513; /* Màu nâu đỏ gạch của giá tiền */
+    }
+</style>
+
+<div class="container-fluid pt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="vintage-title m-0"><i class="bi bi-box-seam-fill"></i> KHO SẢN PHẨM VINTAGE</h2>
+        <a asp-action="Create" class="btn btn-vintage-success shadow-sm">
+            <i class="bi bi-plus-circle-fill"></i> Thêm sản phẩm mới
         </a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card vintage-card shadow-sm">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
+            <table class="table vintage-table align-middle">
+                <thead>
                     <tr>
-                        <th style="width: 8%">Mã SP</th>
-                        <th style="width: 10%">Hình ảnh</th>
-                        <th style="width: 25%">Tên sản phẩm</th>
-                        <th style="width: 15%">Giá bán</th>
-                        <th style="width: 12%" class="text-center">Số lượng</th>
-                        <th style="width: 20%">Mô tả</th>
+                        <th style="width: 8%" class="text-center">Mã số</th>
+                        <th style="width: 10%" class="text-center">Minh họa</th>
+                        <th style="width: 25%">Tên mặt hàng</th>
+                        <th style="width: 15%">Giá niêm yết</th>
+                        <th style="width: 12%" class="text-center">Tồn kho</th>
+                        <th style="width: 20%">Mô tả tóm tắt</th>
                         <th style="width: 10%" class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -33,35 +181,60 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td class="fw-bold">#@item.Id</td>
-                                <td>
+                                <td class="text-center fw-bold text-secondary" style="font-size: 0.9rem;">
+                                    #@item.Id
+                                </td>
+
+                                <td class="text-center">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
-                                        <img src="@item.ImageUrl" alt="@item.Name" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" />
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="vintage-product-img shadow-sm" />
                                     }
                                     else
                                     {
-                                        <span class="text-muted small">No Image</span>
+                                        <div class="vintage-product-img d-flex align-items-center justify-content-center border" style="background-color: #eae5da;">
+                                            <i class="bi bi-image text-muted" style="font-size: 1rem;"></i>
+                                        </div>
                                     }
                                 </td>
-                                <td class="fw-bold text-primary">@item.Name</td>
-                                <td class="text-danger fw-bold">@item.Price.ToString("#,##0") đ</td>
-                                <td class="text-center">
-                                    <span class="badge @(item.stockQuantity <= 5 ? "bg-danger" : "bg-info text-dark")">
-                                        @item.stockQuantity
-                                    </span>
+
+                                <td class="fw-bold text-dark">
+                                    @item.Name
                                 </td>
-                                <td class="text-muted small" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    @item.Description
+
+                                <td class="vintage-price fs-6">
+                                    @item.Price.ToString("#,##0") <small>đ</small>
                                 </td>
+
                                 <td class="text-center">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger"
-                                       onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?')">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
+                                    @if (item.stockQuantity <= 5)
+                                    {
+                                        <span class="badge badge-vintage-danger" title="Sắp hết hàng!">
+                                            <i class="bi bi-exclamation-diamond-fill"></i> @item.stockQuantity mục
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-vintage-safe">
+                                            @item.stockQuantity mục
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="text-muted small" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@item.Description">
+                                    @(string.IsNullOrEmpty(item.Description) ? "— Chưa có mô tả —" : item.Description)
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-vintage-action-edit" title="Sửa thông tin">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-vintage-action-delete" title="Xóa mặt hàng"
+                                           onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?')">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -69,7 +242,10 @@
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Chưa có sản phẩm nào trong hệ thống.</td>
+                            <td colspan="7" class="text-center text-muted py-5">
+                                <i class="bi bi-box-open fs-2 d-block mb-2 text-secondary"></i>
+                                <span class="font-serif italic">Chưa có sản phẩm nào được nhập vào kho lưu trữ.</span>
+                            </td>
                         </tr>
                     }
                 </tbody>

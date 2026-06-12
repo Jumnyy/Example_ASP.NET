@@ -1,57 +1,63 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+ Ten: Le Thanh Ho
+ MSSV: 2123110125
+ Lop: CCQ2311D
+*/
 using CMS.Data;
-// Thêm namespace này ?? dùng ???c CookieAuthenticationDefaults
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// ??ng ký DbContext vào h? th?ng
+// Đăng ký DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// =========================================================================
-// CHÈN T?I ?ÂY: Tr??c dòng var app = builder.Build();
-// 1. Khai báo d?ch v? xác th?c Cookie
+// Đăng ký Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // ???ng d?n n?u ch?a ??ng nh?p
-        options.AccessDeniedPath = "/Account/AccessDenied"; // ???ng d?n n?u vào trang không ???c phép
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
     });
-// =========================================================================
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-var app = builder.Build();
-// Kích hoạt Swagger UI cho cả môi trường Development và Production để dễ kiểm thử
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+builder.Services.AddCors(options =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMS API v1");
+    options.AddPolicy("AllowReactApp",
+        policy => policy.WithOrigins("http://localhost:3000") // Cổng của ReactJS
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
 });
-// Configure the HTTP request pipeline.
+var app = builder.Build();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    // --- THÊM 2 DÒNG NÀY ĐỂ HIỂN THỊ GIAO DIỆN SWAGGER ---
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    // ----------------------------------------------------
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// =========================================================================
-// CHÈN T?I ?ÂY: Ngay tr??c app.UseAuthorization();
-app.UseAuthentication(); // B??C A: Xác nh?n "Anh là ai?" (Ki?m tra th? bài)
-// =========================================================================
-app.UseAuthorization();  // B??C B: Xác nh?n "Anh ???c làm gì?" (Ki?m tra quy?n)
+app.UseCors("AllowReactApp");
+app.UseAuthentication(); // ← Phải có và phải đứng TRƯỚC UseAuthorization
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}"); // Mặc định vào trang Login
 
 app.Run();

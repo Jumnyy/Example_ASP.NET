@@ -1,39 +1,188 @@
 ﻿@model IEnumerable<CMS.Data.Entities.Post>
 @{
     Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Quản lý bài viết";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-dark">DANH SÁCH BÀI VIẾT</h2>
-        <a asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Thêm bài viết mới
+<style>
+    /* Tiêu đề Serif cổ điển kèm nét gạch chân vàng đồng */
+    .vintage-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+        .vintage-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #c49a6c;
+        }
+
+    /* Khối thẻ bài viết phong cách báo cũ độc đáo */
+    .vintage-post-card {
+        border: 2px dashed #52433a !important; /* Viền đứt nét retro */
+        border-radius: 0px !important; /* Góc vuông sắc nét */
+        background-color: #fdfbf7;
+        box-shadow: 0 4px 10px rgba(61, 49, 42, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .vintage-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(61, 49, 42, 0.12);
+            background-color: #fffdfa;
+        }
+
+    /* Đóng khung cố định ảnh Thumbnail tránh vỡ layout */
+    .vintage-img-container {
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        border-bottom: 1px dashed #52433a;
+        background-color: #f5f2eb;
+    }
+
+        .vintage-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* Tiêu đề bài viết trong thẻ */
+    .vintage-post-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        line-height: 1.4;
+        height: 50px; /* Khóa độ cao để đều dòng */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Đoạn văn mô tả tóm tắt */
+    .vintage-post-text {
+        font-size: 0.9rem;
+        color: #615043;
+        height: 60px; /* Khóa độ cao đoạn văn */
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+
+    /* Badge tên chuyên mục xanh rêu */
+    .vintage-badge-category {
+        background-color: #556b2f !important;
+        color: #fffdec !important;
+        border-radius: 0px;
+        font-weight: 600;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    /* Nút bấm Thêm mới */
+    .btn-vintage-success {
+        background-color: #556b2f;
+        color: #fffdec;
+        border: 1px solid #485c28;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 8px 16px;
+        transition: all 0.3s;
+    }
+
+        .btn-vintage-success:hover {
+            background-color: #3d312a;
+            color: #f5ebd9;
+            border-color: #2b221d;
+        }
+
+    /* Các nút chức năng nhỏ */
+    .btn-vintage-action {
+        border-radius: 0px !important;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="container-fluid pt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="vintage-title m-0"><i class="bi bi-blockquote-left"></i> QUẢN LÝ BÀI VIẾT</h2>
+        <a asp-action="Create" class="btn btn-vintage-success shadow-sm">
+            <i class="bi bi-plus-circle-fill"></i> Thêm bài viết mới
         </a>
     </div>
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm">
-                    <img src="@item.ImageUrl" class="card-img-top" alt="Thumbnail">
-                    <div class="card-body">
-                        <span class="badge bg-info text-dark">@item.Category.Name</span>
-                        <h5 class="card-title text-primary">@item.Title</h5>
-                        <p class="card-text text-truncate">@item.Content</p>
-                        <p class="text-muted small">Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")</p>
-                        <a href="/Post/Details/@item.Id" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">
-                            Sửa
-                        </a>
 
-                        <a asp-action="Delete" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-danger"
-                           onclick="return confirm('Chúng ta có chắc chắn muốn xóa bài viết này không?')">
-                            <i class="bi bi-trash"></i> Xóa
-                        </a>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center text-muted py-5">
+                <i class="bi bi-card-text fs-1 d-block mb-2 text-secondary"></i>
+                <span class="font-serif italic">Tòa soạn chưa xuất bản bài viết nào.</span>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card vintage-post-card h-100 border-0">
+
+                        <div class="vintage-img-container">
+                            <img src="@item.ImageUrl" alt="Thumbnail" onerror="this.src='https://placehold.co/400x250?text=No+Image';">
+                        </div>
+
+                        <div class="card-body d-flex flex-column p-3">
+                            <div class="mb-2">
+                                <span class="badge vintage-badge-category shadow-sm">
+                                    <i class="bi bi-tag-fill me-1" style="font-size: 0.7rem;"></i> @item.Category?.Name
+                                </span>
+                            </div>
+
+                            <h5 class="vintage-post-title mb-2" title="@item.Title">
+                                @item.Title
+                            </h5>
+
+                            <div class="vintage-post-text text-muted">
+                                @Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.Content ?? "", "<.*?>", string.Empty))
+                            </div>
+
+                            <div class="mt-auto pt-2 border-top border-light mb-3">
+                                <span class="text-muted small italic">
+                                    <i class="bi bi-calendar3"></i> @item.CreatedDate.ToString("dd/MM/yyyy")
+                                </span>
+                            </div>
+
+                            <div class="btn-group w-100 shadow-sm">
+                                <a href="/Post/Details/@item.Id" class="btn btn-sm btn-outline-secondary btn-vintage-action">
+                                    <i class="bi bi-eye"></i> Xem
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark btn-vintage-action">
+                                    <i class="bi bi-pencil"></i> Sửa
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-danger btn-vintage-action"
+                                   onclick="return confirm('Chúng ta có chắc chắn muốn xóa bài viết này không?')">
+                                    <i class="bi bi-trash3"></i> Xóa
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

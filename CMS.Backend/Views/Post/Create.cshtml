@@ -11,7 +11,7 @@
             <h4 class="mb-0"><i class="bi bi-file-earmark-plus"></i> THÊM BÀI VIẾT MỚI</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
@@ -34,8 +34,16 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Link ảnh đại diện (URL):</label>
-                            <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+                            <label class="form-label fw-bold">Ảnh đại diện bài viết:</label>
+                            <input type="file" name="ImageFile" id="postImageInput" class="form-control" accept="image/*" required />
+                            <small class="text-muted">Hỗ trợ định dạng hình ảnh: .jpg, .png, .webp</small>
+                        </div>
+
+                        <div class="mb-3 text-center">
+                            <label class="form-label d-block text-start text-muted small fw-bold">Xem trước ảnh đại diện:</label>
+                            <div class="border p-2 bg-light d-flex align-items-center justify-content-center" style="height: 160px;">
+                                <img id="postImagePreview" src="https://placehold.co/200x120?text=No+Image" alt="Preview" class="img-fluid" style="max-height: 100%; object-fit: cover;" />
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -58,15 +66,25 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
     <script>
-        // 2. Kích hoạt trình soạn thảo cho thẻ textarea có id là 'Content'
+        // 1. Kích hoạt trình soạn thảo cho thẻ textarea có id là 'Content'
         ClassicEditor
             .create(document.querySelector('#Content'))
             .catch(error => {
                 console.error(error);
             });
+
+        // 2. Logic JavaScript xử lý xem trước (Preview) ảnh khi chọn file từ máy
+        document.getElementById('postImageInput').addEventListener('change', function (event) {
+            const [file] = event.target.files;
+            if (file) {
+                const preview = document.getElementById('postImagePreview');
+                preview.src = URL.createObjectURL(file);
+            }
+        });
     </script>
 }

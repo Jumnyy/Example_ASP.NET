@@ -2,35 +2,189 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    ViewData["Title"] = "Danh sách Danh mục";
+    ViewData["Title"] = "Danh sách Danh mục sản phẩm";
 }
 
-<h2>Danh sách Danh mục</h2>
-
-<p>
-    <a asp-action="Create" class="btn btn-success">Tạo mới Danh mục</a>
-</p>
-
-<table class="table table-striped table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Tên Danh mục</th>
-            <th>Mô tả</th>
-            <th>Số lượng Sản phẩm</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>@(item.Products?.Count ?? 0)</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Xem chi tiết</a>
-                </td>
-            </tr>
+<style>
+    /* Định dạng tiêu đề Serif cổ điển */
+    .vintage-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+        /* Đường gạch chân trang trí giả cổ */
+        .vintage-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #c49a6c;
         }
-    </tbody>
-</table>
+
+    /* Thẻ Card bọc ngoài phong cách retro */
+    .vintage-card {
+        border: 2px dashed #52433a !important; /* Viền đứt nét giả cổ */
+        border-radius: 0px !important; /* Góc vuông sắc nét */
+        background-color: #fdfbf7;
+        box-shadow: 0 5px 15px rgba(61, 49, 42, 0.05);
+    }
+
+    .vintage-card-header {
+        background-color: #3d312a !important; /* Màu nâu gỗ sồi */
+        color: #f5ebd9 !important; /* Chữ vàng cát */
+        border-bottom: 2px solid #c49a6c !important;
+        border-radius: 0px !important;
+        padding: 15px 20px;
+    }
+
+    /* Thiết kế lại bảng dữ liệu */
+    .vintage-table {
+        margin-bottom: 0;
+    }
+
+        .vintage-table thead {
+            background-color: #556b2f !important; /* Màu xanh rêu Olive */
+            color: #fffdec !important;
+        }
+
+        .vintage-table th {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 12px 15px !important;
+            border-bottom: 2px solid #3d312a !important;
+        }
+
+        .vintage-table td {
+            padding: 14px 15px !important;
+            vertical-align: middle;
+            color: #4a3b32;
+            border-bottom: 1px solid #e8e3d7 !important;
+        }
+
+        /* Hiệu ứng dòng xen kẽ màu giấy tập cũ */
+        .vintage-table tbody tr:nth-of-type(odd) {
+            background-color: #f9f7f2;
+        }
+
+        .vintage-table tbody tr:hover {
+            background-color: #f3ebd9 !important; /* Đổi màu trầm ấm khi di chuột */
+            transition: background-color 0.2s ease;
+        }
+
+    /* Nút bấm phong cách Vintage */
+    .btn-vintage-success {
+        background-color: #556b2f; /* Xanh rêu */
+        color: #fffdec;
+        border: 1px solid #485c28;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 8px 16px;
+        transition: all 0.3s;
+    }
+
+        .btn-vintage-success:hover {
+            background-color: #3d312a; /* Chuyển nâu khi hover */
+            color: #f5ebd9;
+            border-color: #2b221d;
+        }
+
+    .btn-vintage-info {
+        background-color: #fffdfa;
+        color: #52433a;
+        border: 1px solid #c8bfae;
+        border-radius: 0px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-vintage-info:hover {
+            background-color: #3d312a;
+            color: #fffdec;
+            border-color: #3d312a;
+        }
+
+    /* Badge số lượng sản phẩm tròn nhỏ tinh tế */
+    .vintage-badge {
+        background-color: #c49a6c; /* Màu vàng đồng giả cổ */
+        color: #fffdec;
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="container-fluid pt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="vintage-title m-0"><i class="bi bi-grid-3x3-gap"></i> QUẢN LÝ DANH MỤC SẢN PHẨM</h2>
+        <a asp-action="Create" class="btn btn-vintage-success shadow-sm">
+            <i class="bi bi-plus-square-fill"></i> Tạo mới Danh mục
+        </a>
+    </div>
+
+    <div class="card vintage-card shadow-sm">
+        <div class="card-header vintage-card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0 small text-uppercase fw-bold" style="letter-spacing: 1px;">
+                <i class="bi bi-list-stars"></i> Cơ sở dữ liệu danh mục hiện tại
+            </h5>
+            <span class="badge bg-light text-dark border fw-normal py-1 px-2" style="font-size:0.75rem;">Total: @Model.Count()</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table vintage-table align-middle">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Tên Danh mục</th>
+                            <th style="width: 45%;">Mô tả chi tiết</th>
+                            <th style="width: 15%;" class="text-center">Sản phẩm thuộc nhóm</th>
+                            <th style="width: 15%;" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    <i class="bi bi-folder-x fs-3 d-block mb-2"></i> Chưa có danh mục sản phẩm nào được khởi tạo.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-dark">
+                                        <i class="bi bi-folder-fill text-warning me-2"></i> @item.Name
+                                    </td>
+                                    <td class="text-muted small">
+                                        @(string.IsNullOrEmpty(item.Description) ? "— Chưa có mô tả cho chuyên mục này —" : item.Description)
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="vintage-badge shadow-sm">
+                                            @(item.Products?.Count ?? 0) mục
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-vintage-info btn-sm px-3 shadow-sm">
+                                            <i class="bi bi-eye-fill"></i> Xem chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

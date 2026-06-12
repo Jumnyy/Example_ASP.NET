@@ -3,83 +3,158 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ThienCMS Admin</title>
+    <title>@ViewData["Title"] - ThienCMS Vintage Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
     <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #212529;
-            color: white;
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fcfbfa; /* Màu nền giấy thô cuộn cũ */
+            color: #3e322b;
         }
 
-            .sidebar a {
-                color: #adb5bd;
-                text-decoration: none;
-                display: block;
-                padding: 10px 20px;
+        h1, h2, h3, h4, h5, h6, .vintage-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Thanh Sidebar Phong cách Cổ điển */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #3d312a; /* Màu nâu gỗ trầm */
+            box-shadow: 3px 0 15px rgba(0,0,0,0.05);
+            border-right: 2px dashed #52433a;
+        }
+
+        .sidebar-header {
+            background-color: #2b221d; /* Nâu tối hơn cho header */
+            padding: 20px 15px;
+        }
+
+        .sidebar a {
+            color: #d2c5b9; /* Màu chữ vàng cát nhẹ */
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+            .sidebar a:hover {
+                background-color: #4f3f36;
+                color: #fffdec;
+                border-left: 4px solid #c49a6c; /* Gờ chỉ màu vàng đồng giả cổ */
+                padding-left: 25px;
             }
 
-                .sidebar a:hover {
-                    background-color: #343a40;
-                    color: white;
-                }
+            /* Trạng thái menu đang kích hoạt */
+            .sidebar a.active, .sidebar a:focus {
+                background-color: #556b2f !important; /* Xanh rêu cổ điển quý phái */
+                color: #fffdec !important;
+                border-left: 4px solid #c49a6c;
+            }
 
-            .sidebar .active {
-                background-color: #0d6efd;
+        .menu-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8c7667;
+            padding: 15px 20px 5px 20px;
+            font-weight: bold;
+        }
+
+        /* Giao diện nút đăng xuất & thông tin user */
+        .user-box {
+            background-color: #4a3b32;
+            border-radius: 6px;
+            padding: 10px;
+            border: 1px solid #5a493f;
+        }
+
+        .btn-vintage-logout {
+            color: #ffb3b3;
+            border: 1px dashed #de7676;
+            background: transparent;
+            transition: all 0.3s;
+        }
+
+            .btn-vintage-logout:hover {
+                background: #8b2525;
                 color: white;
             }
+
+        /* Định hình lại khu vực nội dung chính */
+        main {
+            background-color: #fdfbf7;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-3 col-lg-2 sidebar p-0">
-                <div class="p-3 text-center border-bottom border-secondary">
-                    <h4 class="text-white">ThienCMS Admin</h4>
-                    <ul class="navbar-nav ms-auto">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-white">
-                                    Chào, <strong>@User.FindFirst("FullName")?.Value</strong> (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-outline-danger btn-sm" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
-                            </li>
-                        }
-                    </ul>
+                <div class="sidebar-header text-center border-bottom border-dark">
+                    <h3 class="text-white vintage-brand mb-3" style="letter-spacing: 1px; color: #f5ebd9 !important;">
+                        <i class="bi bi-journal-bookmark-fill text-warning"></i> ThienCMS
+                    </h3>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="user-box text-start text-muted small">
+                            <div class="text-light mb-1">
+                                <i class="bi bi-person-circle text-warning"></i> Chào, <strong>@User.FindFirst("FullName")?.Value</strong>
+                            </div>
+                            <div class="text-warning mb-2" style="font-size: 0.8rem;">
+                                <i class="bi bi-shield-lock"></i> @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+                            </div>
+                            <a class="btn btn-vintage-logout btn-sm w-100 text-center p-1 mt-1" asp-controller="Account" asp-action="Logout">
+                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                            </a>
+                        </div>
+                    }
                 </div>
-                <div class="mt-3">
+
+                <div class="mt-2">
+                    <div class="menu-label">Hệ thống</div>
                     <a asp-controller="Home" asp-action="Index">
-                        <i class="bi bi-speedometer2"></i> Bảng điều khiển
-                    </a>
-                    <a asp-controller="Category" asp-action="Index">
-                        <i class="bi bi-grid"></i> Quản lý Danh mục
-                    </a>
-                    <a asp-controller="Post" asp-action="Index">
-                        <i class="bi bi-file-earmark-post"></i> Quản lý Bài viết
-                    </a>
-                    <a asp-controller="User" asp-action="Index">
-                        <i class="bi bi-people"></i> Quản lý Thành viên
-                    </a>
-                    <a asp-controller="ProductCategory" asp-action="Index">
-                        <i class="bi bi-grid"></i> Danh mục sản phẩm
-                    </a>
-                    <a asp-controller="Product" asp-action="Index">
-                        <i class="bi bi-box-seam"></i> Sản phẩm
-                    </a>
-                    <a asp-controller="Customer" asp-action="Index">
-                        <i class="bi bi-people"></i> Khách hàng
-                    </a>
-                    <a asp-controller="Order" asp-action="Index">
-                        <i class="bi bi-grid"></i> Đơn hàng
-                    </a>
-                    <a asp-controller="OrderDetail" asp-action="Index">
-                        <i class="bi bi-grid"></i> Đơn hàng chi tiết
+                        <i class="bi bi-house-door"></i> Tổng quan của Shop
                     </a>
 
+                    <div class="menu-label">Tạp chí / Bài viết</div>
+                    <a asp-controller="Category" asp-action="Index">
+                        <i class="bi bi-folder2-open"></i> Danh mục bài viết
+                    </a>
+                    <a asp-controller="Post" asp-action="Index">
+                        <i class="bi bi-blockquote-left"></i> Quản lý bài viết
+                    </a>
+
+                    <div class="menu-label">Cửa hàng Vintage</div>
+                    <a asp-controller="CategoryProduct" asp-action="Index">
+                        <i class="bi bi-tags"></i> Danh mục sản phẩm
+                    </a>
+                    <a asp-controller="Product" asp-action="Index">
+                        <i class="bi bi-box-seam"></i> Quản lý sản phẩm
+                    </a>
+                    <a asp-controller="Order" asp-action="Index">
+                        <i class="bi bi-receipt"></i> Quản lý đơn hàng
+                    </a>
+                    <a asp-controller="OrderDetail" asp-action="Index">
+                        <i class="bi bi-card-list"></i> Chi tiết hóa đơn
+                    </a>
+
+                    <div class="menu-label">Nhân sự & Đối tác</div>
+                    <a asp-controller="Customer" asp-action="Index">
+                        <i class="bi bi-person-hearts"></i> Sổ khách hàng
+                    </a>
+                    <a asp-controller="User" asp-action="Index">
+                        <i class="bi bi-shield-shaded"></i> Ban quản trị
+                    </a>
                 </div>
             </nav>
 
@@ -92,5 +167,17 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            var currentUrl = window.location.pathname;
+            $('.sidebar a').each(function () {
+                var linkUrl = $(this).attr('href');
+                if (currentUrl.toLowerCase() === linkUrl.toLowerCase()) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

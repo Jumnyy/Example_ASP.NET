@@ -1,36 +1,199 @@
 ﻿@model IEnumerable<CMS.Data.Entities.Category>
 @{
     Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Danh mục bài viết";
 }
-<h2 class="text-primary">DANH SÁCH DANH MỤC (DỮ LIỆU THẬT LẤY TỪ DATABASE)</h2>
-<a asp-action="Create" class="btn btn-success">
-    <i class="bi bi-plus-circle"></i> Thêm danh mục mới
-</a>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên danh mục</th>
-            <th>Mô tả</th>
-            <th style="width:150px">Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"
-                       class="btn btn-sm btn-outline-warning">Sửa</a>
 
-                    <a asp-action="Delete" asp-route-id="@item.Id"
-                       class="btn btn-sm btn-outline-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">Xóa</a>
-                </td>
-            </tr>
-            }
-    </tbody>
-</table>
+<style>
+    /* Tiêu đề Serif cổ điển kèm nét gạch chân vàng đồng */
+    .vintage-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+        .vintage-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #c49a6c;
+        }
+
+    /* Thẻ Card bọc ngoài vuông vức, viền đứt nét retro */
+    .vintage-card {
+        border: 2px dashed #52433a !important;
+        border-radius: 0px !important;
+        background-color: #fdfbf7;
+        box-shadow: 0 5px 15px rgba(61, 49, 42, 0.05);
+    }
+
+    .vintage-card-header {
+        background-color: #3d312a !important; /* Màu nâu gỗ sồi */
+        color: #f5ebd9 !important; /* Chữ vàng cát nhẹ */
+        border-bottom: 2px solid #c49a6c !important;
+        border-radius: 0px !important;
+        padding: 15px 20px;
+    }
+
+    /* Thiết kế lại bảng dữ liệu tập cũ */
+    .vintage-table {
+        margin-bottom: 0;
+    }
+
+        .vintage-table thead {
+            background-color: #556b2f !important; /* Màu xanh rêu Olive */
+            color: #fffdec !important;
+        }
+
+        .vintage-table th {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 12px 15px !important;
+            border-bottom: 2px solid #3d312a !important;
+        }
+
+        .vintage-table td {
+            padding: 12px 15px !important;
+            vertical-align: middle;
+            color: #4a3b32;
+            border-bottom: 1px solid #e8e3d7 !important;
+        }
+
+        /* Hàng xen kẽ màu giấy ngà */
+        .vintage-table tbody tr:nth-of-type(odd) {
+            background-color: #f9f7f2;
+        }
+
+        .vintage-table tbody tr:hover {
+            background-color: #f3ebd9 !important;
+            transition: background-color 0.2s ease;
+        }
+
+    /* Nút bấm Thêm mới */
+    .btn-vintage-success {
+        background-color: #556b2f;
+        color: #fffdec;
+        border: 1px solid #485c28;
+        border-radius: 0px;
+        font-weight: 700;
+        padding: 8px 16px;
+        transition: all 0.3s;
+    }
+
+        .btn-vintage-success:hover {
+            background-color: #3d312a;
+            color: #f5ebd9;
+            border-color: #2b221d;
+        }
+
+    /* Nhóm nút hành động Sửa / Xóa giả cổ */
+    .btn-vintage-edit {
+        background-color: #fffdfa;
+        color: #bfa15f;
+        border: 1px solid #dcd1ba;
+        border-radius: 0px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-vintage-edit:hover {
+            background-color: #c49a6c; /* Vàng đồng */
+            color: #fffdec;
+            border-color: #c49a6c;
+        }
+
+    .btn-vintage-delete {
+        background-color: #fffdfa;
+        color: #c95a49;
+        border: 1px solid #ebd4d0;
+        border-radius: 0px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .btn-vintage-delete:hover {
+            background-color: #a63a2b; /* Đỏ gạch nung */
+            color: #fffdec;
+            border-color: #a63a2b;
+        }
+</style>
+
+<div class="container-fluid pt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="vintage-title m-0"><i class="bi bi-folder2-open"></i> QUẢN LÝ DANH MỤC BÀI VIẾT</h2>
+        <a asp-action="Create" class="btn btn-vintage-success shadow-sm">
+            <i class="bi bi-plus-circle-fill"></i> Thêm danh mục mới
+        </a>
+    </div>
+
+    <div class="card vintage-card shadow-sm">
+        <div class="card-header vintage-card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0 small text-uppercase fw-bold" style="letter-spacing: 1px;">
+                <i class="bi bi-bookmark-star-fill"></i> Phân loại bài viết hiện hành
+            </h5>
+            <span class="badge bg-light text-dark border fw-normal py-1 px-2" style="font-size:0.75rem;">Số lượng: @Model.Count()</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table vintage-table align-middle">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;" class="text-center">Mã ID</th>
+                            <th style="width: 30%;">Tên danh mục bài viết</th>
+                            <th style="width: 40%;">Mô tả ngắn</th>
+                            <th style="width: 20%;" class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    <i class="bi bi-journal-x fs-3 d-block mb-2"></i> Hệ thống chưa ghi nhận danh mục tin tức nào.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold text-secondary" style="font-size: 0.9rem;">
+                                        #@item.Id
+                                    </td>
+                                    <td class="fw-bold text-dark">
+                                        <i class="bi bi-hash text-warning me-1"></i> @item.Name
+                                    </td>
+                                    <td class="text-muted small">
+                                        @(string.IsNullOrEmpty(item.Description) ? "— Không có mô tả —" : item.Description)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group shadow-sm">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-vintage-edit btn-sm px-2">
+                                                <i class="bi bi-pencil-square"></i> Sửa
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                               class="btn btn-vintage-delete btn-sm px-2"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">
+                                                <i class="bi bi-trash3"></i> Xóa
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

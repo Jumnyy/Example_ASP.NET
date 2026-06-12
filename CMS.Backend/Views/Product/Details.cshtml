@@ -1,0 +1,282 @@
+﻿@model CMS.Data.Entities.Product
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Sử dụng layout chung của khách hàng
+    ViewData["Title"] = Model.Name;
+}
+
+<style>
+    body {
+        background-color: #fcfbf7;
+    }
+
+    /* Khung ảnh sản phẩm chính phóng lớn */
+    .product-gallery-card {
+        background: #ffffff;
+        border: 1px solid #eae4d8;
+        padding: 15px;
+    }
+
+    .main-product-img {
+        width: 100%;
+        max-height: 480px;
+        object-fit: contain;
+        background-color: #faf8f5;
+    }
+
+    /* Khối thông tin bán hàng bên phải */
+    .product-commerce-info {
+        padding-left: 10px;
+    }
+
+    .shop-brand {
+        font-family: 'Quicksand', sans-serif;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #c49a6c;
+        letter-spacing: 1px;
+    }
+
+    .product-shop-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #2b221d;
+        font-size: 2rem;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    /* Hiển thị giá bán lớn kiểu Store */
+    .price-store-box {
+        background-color: #f7f4ed;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border-left: 4px solid #556b2f;
+    }
+
+    .store-price-label {
+        font-size: 0.8rem;
+        color: #7a6e67;
+        text-transform: uppercase;
+        display: block;
+        font-weight: 600;
+    }
+
+    .store-price-value {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #8b4513;
+        font-size: 2.2rem;
+        line-height: 1;
+    }
+
+    .store-currency {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #8b4513;
+        vertical-align: super;
+    }
+
+    /* Nút hành động mua hàng */
+    .btn-shop-add-cart {
+        background-color: #556b2f; /* Xanh rêu rêu */
+        color: #fffdec;
+        border: none;
+        border-radius: 0px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 14px 28px;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-shop-add-cart:hover {
+            background-color: #3d312a;
+            color: #fffdfa;
+        }
+
+    .btn-shop-back {
+        background-color: transparent;
+        color: #706259;
+        border: 1px solid #d1c7bd;
+        border-radius: 0px;
+        font-weight: 600;
+        padding: 14px 20px;
+        transition: all 0.2s;
+    }
+
+        .btn-shop-back:hover {
+            background-color: #3d312a;
+            color: #fffdfa;
+            border-color: #3d312a;
+        }
+
+    /* Khối cam kết bán hàng tin cậy */
+    .store-commitments {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px dashed #e3dbce;
+    }
+
+    .commitment-item {
+        font-size: 0.9rem;
+        color: #594e46;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .commitment-item i {
+            color: #c49a6c;
+            font-size: 1.1rem;
+        }
+
+    /* Khối thông số kỹ thuật bên dưới */
+    .product-description-tabs {
+        margin-top: 50px;
+        background: #ffffff;
+        border: 1px solid #eae4d8;
+        padding: 30px;
+    }
+
+    .tab-custom-header {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #3d312a;
+        border-bottom: 2px solid #556b2f;
+        display: inline-block;
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .description-text {
+        font-family: 'Playfair Display', serif;
+        color: #4f433b;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        white-space: pre-line;
+    }
+
+    /* Số lượng */
+    .quantity-selector {
+        max-width: 120px;
+        border-radius: 0px !important;
+        border-color: #d1c7bd;
+        text-center;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row">
+
+        <div class="col-md-6 col-lg-5 mb-4 mb-md-0">
+            <div class="product-gallery-card shadow-sm text-center">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" class="main-product-img img-fluid shadow-sm" />
+                }
+                else
+                {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="min-height: 400px; background-color: #faf8f5;">
+                        <i class="bi bi-box-seam display-4 mb-3" style="color: #d1c7bd;"></i>
+                        <span class="fst-italic font-serif">Hình ảnh đang được cập nhật</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-7">
+            <div class="product-commerce-info">
+
+                <span class="shop-brand">
+                    <i class="bi bi-tag-fill me-1"></i> @(Model.CategoryProduct != null ? Model.CategoryProduct.Name : "Bộ sưu tập giới hạn")
+                </span>
+
+                <h1 class="product-shop-title">@Model.Name</h1>
+
+                <div class="mb-4">
+                    @if (Model.stockQuantity > 0)
+                    {
+                        <span class="text-success small fw-bold bg-success bg-opacity-10 px-2 py-1">
+                            <i class="bi bi-check-circle-fill me-1"></i> Còn hàng trong kho
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger small fw-bold bg-danger bg-opacity-10 px-2 py-1">
+                            <i class="bi bi-x-circle-fill me-1"></i> Tạm hết hàng
+                        </span>
+                    }
+                </div>
+
+                <div class="price-store-box shadow-sm">
+                    <span class="store-price-label">Giá bán ưu đãi</span>
+                    <div class="d-flex align-items-baseline">
+                        <span class="store-price-value">@Model.Price.ToString("#,##0")</span>
+                        <span class="store-currency ms-1">đ</span>
+                    </div>
+                </div>
+
+                @if (Model.stockQuantity > 0)
+                {
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2 small text-muted fw-bold text-uppercase">Số lượng:</span>
+                            <input type="number" class="form-control quantity-selector text-center" value="1" min="1" max="@Model.stockQuantity" />
+                        </div>
+
+                        <button class="btn btn-shop-add-cart d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-bag-plus-fill fs-5"></i> Thêm vào giỏ hàng
+                        </button>
+                    </div>
+                }
+
+                <div class="d-flex gap-2">
+                    <a asp-action="Index" class="btn btn-shop-back d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
+                    </a>
+                </div>
+
+                <div class="store-commitments">
+                    <div class="commitment-item">
+                        <i class="bi bi-truck"></i>
+                        <span>Giao hàng tận nơi toàn quốc nhanh chóng, an toàn.</span>
+                    </div>
+                    <div class="commitment-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Bảo hành chính hãng mặt hàng trong vòng 12 tháng.</span>
+                    </div>
+                    <div class="commitment-item">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        <span>Đổi trả linh hoạt trong vòng 7 ngày nếu phát hiện lỗi sản xuất.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="product-description-tabs shadow-sm">
+                <div class="tab-custom-header">Mô tả chi tiết sản phẩm</div>
+                <div class="description-text">
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        @Model.Description
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">Thông tin chi tiết về chất liệu, nguồn gốc và kích thước của sản phẩm đang được đội ngũ biên tập cập nhật sớm nhất đến quý khách.</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
