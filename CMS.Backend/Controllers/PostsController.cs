@@ -19,6 +19,13 @@ namespace CMS.Backend.Controllers
         // =========================================
         // GET ALL POSTS
         // =========================================
+        // =========================================
+        // GET ALL POSTS
+        // =========================================
+        [HttpGet]
+        // =========================================
+        // GET ALL POSTS
+        // =========================================
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -28,15 +35,16 @@ namespace CMS.Backend.Controllers
                 {
                     p.Id,
                     p.Title,
+                    p.Content,
                     p.ImageUrl,
                     p.CreatedDate,
-                    CategoryName = p.Category.Name
+                    p.CategoryId, // <-- BẮT BUỘC THÊM TRƯỜNG NÀY ĐỂ FRONTEND LỌC THEO CATEGORY
+                    CategoryName = p.Category != null ? p.Category.Name : ""
                 })
                 .ToList();
 
             return Ok(posts);
         }
-
         // =========================================
         // GET POSTS BY CATEGORY
         // =========================================
@@ -49,6 +57,7 @@ namespace CMS.Backend.Controllers
                 {
                     p.Id,
                     p.Title,
+                    p.Content, // <-- THÊM VÀO ĐÂY LUÔN NẾU TRANG DANH MỤC CŨNG DÙNG POSTCARD
                     p.ImageUrl,
                     p.CreatedDate
                 })
@@ -56,7 +65,6 @@ namespace CMS.Backend.Controllers
 
             return Ok(posts);
         }
-
         // =========================================
         // GET DETAIL
         // =========================================

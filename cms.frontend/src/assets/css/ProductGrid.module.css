@@ -1,0 +1,74 @@
+/* src/pages/home/ProductGrid.module.css */
+.vintageSubtitle {
+    font-size: 0.75rem;
+    color: #a89485;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.vintageHeading {
+    font-family: serif;
+    font-weight: 600;
+    color: #4a3f35;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.wavyLine {
+    color: #c4b5a7;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    margin-bottom: 25px;
+}
+
+.filterWrapper {
+    width: 100%;
+    margin-bottom: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.filterScroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    max-width: 100%;
+    scrollbar-width: none;
+}
+
+    .filterScroll::-webkit-scrollbar {
+        display: none;
+    }
+
+.filterBtn {
+    background-color: #fdfbf7;
+    color: #6e5f54;
+    border: 1px solid #eadeca;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+    .filterBtn:hover {
+        background-color: #f4eee2;
+        color: #4a3f35;
+        transform: translateY(-1px);
+    }
+
+.activeFilter {
+    background-color: #b36b5c !important;
+    color: #ffffff !important;
+    border-color: #b36b5c !important;
+    box-shadow: 0 4px 12px rgba(179, 107, 92, 0.25);
+}
+
+.loadingText, .emptyText {
+    font-size: 0.9rem;
+    color: #8c7a6e;
+    font-style: italic;
+}

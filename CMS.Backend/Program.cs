@@ -1,6 +1,6 @@
 ﻿/*
- Ten: Le Thanh Ho
- MSSV: 2123110125
+ Ten: Nguyen Tan Thien
+ MSSV: 2123110126
  Lop: CCQ2311D
 */
 using CMS.Data;

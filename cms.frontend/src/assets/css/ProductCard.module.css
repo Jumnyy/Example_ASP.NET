@@ -1,0 +1,151 @@
+﻿/* Khung thẻ mềm mại, mang tone màu kem sữa ấm áp */
+.chillCard {
+    background-color: #fdfbf7; /* Màu vải canvas organic */
+    border-radius: 20px; /* Bo góc cực mềm */
+    padding: 12px;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(181, 169, 153, 0.15); /* Đổ bóng cực nhẹ, mịn màng như sương */
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(234, 222, 202, 0.5);
+    overflow: hidden;
+}
+
+    .chillCard:hover {
+        transform: translateY(-6px); /* Nhấc lên nhẹ nhàng */
+        box-shadow: 0 12px 30px rgba(160, 145, 126, 0.25);
+    }
+
+/* Ruy băng thêu vải nhỏ tinh tế */
+.cozyRibbon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #c97a6b; /* Hồng đất / Cam gạch mờ */
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 30px;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    font-family: sans-serif;
+}
+
+/* Bộ bọc ảnh với nước ảnh hơi ngả ấm */
+.imageWarmWrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #f4eee2;
+}
+
+.cozyImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(10%) contrast(90%) brightness(98%); /* Bộ lọc ấm áp, mượt mà */
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.chillCard:hover .cozyImage {
+    transform: scale(1.06); /* Phóng to rất khẽ */
+}
+
+/* Lớp phủ mờ ảo lãng mạn (Blured lofi effect) */
+.cozyOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(114, 98, 85, 0.3); /* Nền nắng chiều nhẹ */
+    backdrop-filter: blur(4px); /* Làm mờ hậu cảnh thơ mộng */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.chillCard:hover .cozyOverlay {
+    opacity: 1;
+}
+
+/* Nhóm nút tròn mềm mịn */
+.btnGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70%;
+}
+
+.roundBtn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #5c4d42;
+    border: none;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+    .roundBtn:hover {
+        background: #5c4d42;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+/* Phần chữ phía dưới */
+.chillBody {
+    padding: 14px 6px 6px 6px;
+    text-align: left;
+}
+
+.curatedText {
+    font-size: 0.7rem;
+    color: #a89485;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.chillTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4a3f35; /* Nâu cà phê đậm dễ chịu */
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Tự cắt chữ nếu tên quá dài */
+}
+
+/* Giá tiền thanh lịch */
+.chillPriceRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chillCurrentPrice {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #b36b5c; /* Tone màu hồng gạch nhạt nhã nhặn */
+}
+
+.chillOldPrice {
+    font-size: 0.85rem;
+    color: #c4b5a7;
+    text-decoration: line-through;
+}
