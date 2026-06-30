@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CMS.Data.Entities.Banner>
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Quản Lý Banner";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-uppercase fw-bold" style="color: #433422;">Danh Sách Banner Quảng Cáo</h2>
+        <a asp-action="Create" class="btn btn-success fw-bold">
+            <i class="bi bi-plus-circle"></i> Thêm Banner Mới
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped align-middle shadow-sm">
+        <thead class="table-dark text-center">
+            <tr>
+                <th style="width: 5%;">ID</th>
+                <th style="width: 20%;">Tiêu Đề</th>
+                <th style="width: 25%;">Hình Ảnh</th>
+                <th style="width: 20%;">Đường Dẫn (Link)</th>
+                <th style="width: 10%;">Thứ Tự</th>
+                <th style="width: 10%;">Trạng Thái</th>
+                <th style="width: 10%;">Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center fw-bold">@item.Id</td>
+                    <td>@item.Title</td>
+                    <td class="text-center">
+                        <img src="@item.ImageUrl" alt="@item.Title" style="max-height: 70px; max-width: 150px; object-fit: cover; border-radius: 4px;" />
+                    </td>
+                    <td><small class="text-muted">@item.LinkUrl</small></td>
+                    <td class="text-center">@item.DisplayOrder</td>
+                    <td class="text-center">
+                        @if (item.Status == 1)
+                        {
+                            <span class="badge bg-success">Hiển thị</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Ẩn</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-1">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa banner này không?')">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

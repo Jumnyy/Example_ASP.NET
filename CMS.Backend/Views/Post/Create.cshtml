@@ -1,0 +1,90 @@
+﻿@model CMS.Data.Entities.Post
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Thêm bài viết mới";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-file-earmark-plus"></i> THÊM BÀI VIẾT MỚI</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tiêu đề bài viết:</label>
+                            <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề..." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nội dung chi tiết:</label>
+                            <textarea asp-for="Content" class="form-control" rows="10" placeholder="Viết nội dung tại đây..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Chuyên mục:</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryList">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ảnh đại diện bài viết:</label>
+                            <input type="file" name="ImageFile" id="postImageInput" class="form-control" accept="image/*" required />
+                            <small class="text-muted">Hỗ trợ định dạng hình ảnh: .jpg, .png, .webp</small>
+                        </div>
+
+                        <div class="mb-3 text-center">
+                            <label class="form-label d-block text-start text-muted small fw-bold">Xem trước ảnh đại diện:</label>
+                            <div class="border p-2 bg-light d-flex align-items-center justify-content-center" style="height: 160px;">
+                                <img id="postImagePreview" src="https://placehold.co/200x120?text=No+Image" alt="Preview" class="img-fluid" style="max-height: 100%; object-fit: cover;" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ngày đăng:</label>
+                            <input asp-for="CreatedDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <hr />
+                        <div class="d-grid gap-2">
+                            <a asp-action="create" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                            </a>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        // 1. Kích hoạt trình soạn thảo cho thẻ textarea có id là 'Content'
+        ClassicEditor
+            .create(document.querySelector('#Content'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        // 2. Logic JavaScript xử lý xem trước (Preview) ảnh khi chọn file từ máy
+        document.getElementById('postImageInput').addEventListener('change', function (event) {
+            const [file] = event.target.files;
+            if (file) {
+                const preview = document.getElementById('postImagePreview');
+                preview.src = URL.createObjectURL(file);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,152 @@
+﻿/* Tông màu chủ đạo hoài cổ: Nền kem #f4ebd0, Chữ nâu #433422, Điểm nhấn đỏ gạch #a74343 */
+
+.vintagePostCard {
+    background-color: #f4ebd0;
+    border: 2px solid #433422;
+    border-radius: 4px; /* Bo góc nhẹ đồng bộ */
+    padding: 14px;
+    position: relative;
+    font-family: "Courier New", Courier, Georgia, serif;
+    /* Đổ bóng cứng dạng khối */
+    box-shadow: 4px 4px 0px #433422;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+    .vintagePostCard:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px #433422;
+    }
+
+/* Khung bọc ảnh */
+.imageWarmWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10; /* Tỷ lệ ảnh ngang chuẩn blog */
+    border: 2px solid #433422;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: #ecdcb9;
+}
+
+.cozyPostImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(12%) contrast(95%); /* Filter ảnh film cũ */
+    transition: transform 0.4s ease;
+}
+
+.vintagePostCard:hover .cozyPostImage {
+    transform: scale(1.04);
+}
+
+/* Badge Ngày tháng dạng nhãn mác giấy treo */
+.cozyDateBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #f4ebd0;
+    border: 2px solid #433422;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    min-width: 55px;
+    box-shadow: 2px 2px 0px #433422;
+    z-index: 2;
+}
+
+.badgeDay {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #a74343; /* Đỏ gạch nổi bật ngày */
+    line-height: 1.1;
+}
+
+.badgeMonth {
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #433422;
+    text-transform: uppercase;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+/* Khối nội dung bên dưới */
+.chillPostBody {
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.postMeta {
+    font-size: 0.75rem;
+    color: #2c5d63; /* Màu xanh rêu vintage điểm xuyết */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.postTitle {
+    margin: 0 0 10px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.postTitleLink {
+    color: #433422;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .postTitleLink:hover {
+        color: #a74343; /* Hover đổi sang màu đỏ gạch */
+    }
+
+/* Đoạn trích dẫn ngắn */
+.postExcerpt {
+    font-size: 0.88rem;
+    color: #615043;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    /* Cắt chữ gọn gàng sau 3 dòng */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 3.96rem;
+}
+
+/* Khu vực nút đọc tiếp */
+.readMoreWrapper {
+    margin-top: auto; /* Luôn đẩy nút xuống đáy Card kể cả text ngắn dài */
+    padding-top: 5px;
+}
+
+.readMoreBtn {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #433422;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 2px solid #433422; /* Đường gạch chân dầy cá tính */
+    padding-bottom: 2px;
+    transition: all 0.2s ease;
+}
+
+    .readMoreBtn:hover {
+        color: #a74343;
+        border-bottom-color: #a74343;
+        gap: 10px; /* Hiệu ứng mũi tên dịch chuyển nhẹ khi hover */
+    }

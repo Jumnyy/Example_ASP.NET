@@ -1,0 +1,186 @@
+﻿/* Tông màu chủ đạo hoài cổ: Nền kem #f4ebd0, Chữ nâu #433422, Khối màu #2c5d63 */
+
+.chillCard {
+    background-color: #f4ebd0;
+    border: 2px solid #433422;
+    border-radius: 4px; /* Bo góc nhẹ kiểu tem thư cổ điển */
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+    font-family: "Courier New", Courier, Georgia, serif;
+    /* Đổ bóng cứng sắc nét đặc trưng của Pop-art Retro */
+    box-shadow: 4px 4px 0px #433422; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chillCard:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #433422;
+}
+
+/* Ribbon nhãn giảm giá dạng tag giấy treo */
+.cozyRibbon {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #a74343; /* Màu đỏ gạch/đỏ đô hoài cổ */
+    color: #ffffff;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 1px solid #433422;
+    border-radius: 2px;
+    z-index: 3;
+    box-shadow: 2px 2px 0px #433422;
+}
+
+/* Wrapper hình ảnh */
+.imageWarmWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Tạo khung vuông */
+    border: 2px solid #433422;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: #ecdcb9;
+}
+
+.cozyImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(10%) contrast(95%); /* Tạo hiệu ứng phim cũ nhẹ */
+    transition: transform 0.3s ease;
+}
+
+.chillCard:hover .cozyImage {
+    transform: scale(1.03);
+}
+
+/* Lớp phủ Hover phong cách Retro tương phản */
+.cozyOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(67, 52, 34, 0.85); /* Nền nâu mờ */
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+}
+
+.imageWarmWrapper:hover .cozyOverlay {
+    opacity: 1;
+}
+
+.btnGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
+
+/* Nút bấm trong Card */
+.roundBtn {
+    background-color: #f4ebd0;
+    color: #433422;
+    border: 2px solid #433422;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px #2c5d63; /* Đổ bóng khối màu xanh rêu */
+    transition: all 0.15s ease;
+}
+
+.roundBtn:hover {
+    background-color: #2c5d63;
+    color: #ffffff;
+    box-shadow: 1px 1px 0px #433422;
+    transform: translate(2px, 2px);
+}
+
+/* Khu vực nội dung chữ bên dưới */
+.chillBody {
+    padding-top: 14px;
+    text-align: left;
+}
+
+.curatedText {
+    font-size: 0.7rem;
+    color: #7a685c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.chillTitle {
+    font-size: 1rem;
+    color: #433422;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    /* Giới hạn tên sản phẩm trong 2 dòng để đều layout */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.6rem;
+}
+
+/* Giá tiền */
+.chillPriceRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.chillCurrentPrice {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #a74343; /* Màu đỏ vintage nổi bật */
+}
+
+.chillOldPrice {
+    font-size: 0.85rem;
+    color: #a2b29f;
+    text-decoration: line-through;
+}
+/* Làm mờ nhẹ ảnh khi hết hàng */
+.blurredImage {
+    opacity: 0.6;
+    filter: grayscale(30%); /* Hơi giảm màu một chút cho có cảm giác hoài niệm/hết hàng */
+}
+
+/* Nhãn Hết Hàng đè lên giữa ảnh */
+.soldOutBadge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(122, 104, 92, 0.85); /* Màu nâu retro mờ */
+    color: #eadeca; /* Màu kem */
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border: 1px dashed #eadeca;
+    border-radius: 4px;
+    pointer-events: none; /* Không cản trở click chuột */
+}
+
+/* Thêm hiệu ứng giảm tương tác cho toàn bộ card nếu cần */
+.outOfStockCard {
+    cursor: not-allowed;
+}

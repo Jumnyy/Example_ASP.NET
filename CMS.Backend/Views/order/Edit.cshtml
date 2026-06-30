@@ -1,0 +1,78 @@
+﻿@model CMS.Data.Entities.Order
+
+@{
+    ViewData["Title"] = "Cập Nhật Đơn Hàng";
+}
+
+<div class="container my-5" style="font-family: 'Georgia', serif; color: #433422; max-width: 600px;">
+    <h2 class="mb-4 fw-bold text-uppercase text-center" style="font-family: 'Courier New', serif; letter-spacing: 1px; text-shadow: 1px 1px 0px #ecdcb9;">
+        <i class="fa-solid fa-pen-to-square me-2"></i> Xử Lý Đơn Hàng #@Model.Id
+    </h2>
+
+    <div class="card border-2 p-4" style="background-color: #f4ebd0; border-color: #433422; border-radius: 4px; box-shadow: 5px 5px 0px #433422;">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-4">
+                <label asp-for="Status" class="form-label fw-bold text-uppercase small" style="letter-spacing: 1px;">Cập Nhật Trạng Thái Đơn</label>
+                <select asp-for="Status" class="form-select border-2 shadow-none fw-bold" style="border-color: #433422; color: #433422; border-radius: 4px;">
+                    <option value="0">🛒 Chờ xác nhận đơn</option>
+                    <option value="1">🚚 Đang đóng gói & giao hàng</option>
+                    <option value="2">🎉 Đã giao hàng thành công</option>
+                    <option value="3">❌ Đã hủy đơn hàng</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Notes" class="form-label fw-bold text-uppercase small" style="letter-spacing: 1px;">Ghi Chú Giao Hàng / Lời Nhắn</label>
+                <textarea asp-for="Notes" class="form-control border-2 shadow-none" rows="4" style="border-color: #433422; border-radius: 4px;" placeholder="Nhập thời gian giao bánh hoặc lý do hủy đơn (nếu có)..."></textarea>
+                <span asp-validation-for="Notes" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex justify-content-between pt-2">
+                <a asp-action="Index" class="btn py-2 px-4 fw-bold text-uppercase vintage-btn-secondary" style="text-decoration: none;">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Quay Lại
+                </a>
+                <button type="submit" class="btn py-2 px-4 fw-bold text-uppercase vintage-btn-primary">
+                    <i class="fa-solid fa-floppy-disk me-2"></i> Lưu Thay Đổi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .vintage-btn-primary {
+        background-color: #a74343 !important;
+        color: #ffffff !important;
+        font-family: "Courier New", serif;
+        border: 2px solid #433422 !important;
+        border-radius: 4px;
+        box-shadow: 4px 4px 0px #433422;
+        transition: all 0.15s ease;
+    }
+
+        .vintage-btn-primary:hover {
+            background-color: #2c5d63 !important;
+            box-shadow: 1px 1px 0px #433422;
+            transform: translate(3px, 3px);
+        }
+
+    .vintage-btn-secondary {
+        background-color: #ffffff !important;
+        color: #433422 !important;
+        font-family: "Courier New", serif;
+        border: 2px solid #433422 !important;
+        border-radius: 4px;
+        box-shadow: 4px 4px 0px #433422;
+        transition: all 0.15s ease;
+    }
+
+        .vintage-btn-secondary:hover {
+            background-color: #eadeca !important;
+            box-shadow: 1px 1px 0px #433422;
+            transform: translate(3px, 3px);
+        }
+</style>
